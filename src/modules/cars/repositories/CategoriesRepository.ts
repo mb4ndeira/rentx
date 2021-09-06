@@ -4,26 +4,36 @@ import { ICategoriesRepository, ICreateCategoryDTO } from './ICategoriesReposito
 class CategoriesRepository implements ICategoriesRepository {
   private categories: Category[] = []
 
-  constructor () {
-    this.categories = []
+private static INSTANCE: CategoriesRepository
+
+private constructor () {
+  this.categories = []
+}
+
+public static getInstance (): CategoriesRepository {
+  if (!CategoriesRepository.INSTANCE) {
+    CategoriesRepository.INSTANCE = new CategoriesRepository()
   }
 
-  create ({ name, description }: ICreateCategoryDTO): void {
-    const category = new Category()
+  return CategoriesRepository.INSTANCE
+}
 
-    Object.assign(category, { name, description, createdAt: new Date() })
+create ({ name, description }: ICreateCategoryDTO): void {
+  const category = new Category()
 
-    this.categories.push(category)
-  }
+  Object.assign(category, { name, description, createdAt: new Date() })
 
-  list (): Category[] {
-    return this.categories
-  }
+  this.categories.push(category)
+}
 
-  findByName (name: string): Category {
-    const category = this.categories.find(category => category.name === name)
-    return category
-  }
+list (): Category[] {
+  return this.categories
+}
+
+findByName (name: string): Category {
+  const category = this.categories.find(category => category.name === name)
+  return category
+}
 }
 
 export { CategoriesRepository }
